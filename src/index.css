@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(10px); /* Slight upward motion */
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0); /* Reset position */
+    }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 500ms ease-in-out;
+}
