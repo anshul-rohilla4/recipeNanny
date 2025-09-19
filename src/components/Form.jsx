@@ -6,11 +6,11 @@ import IngredientsList from './IngridentsList';
 import CookOptions from './CookOptions';
 import ItemsInput from './ItemsInput';
 import SubmitFooter from './SubmitFooter';
+
 const Form = ({ items, setItems, haveItems, setHaveItems }) => {
 
     const [inputValue, setInputValue] = useState("");
     const [showResponse, setShowResponse] = useState(false); 
-
 
     const handleAddItem = (e) =>//adding ingredients
     {
@@ -22,19 +22,23 @@ const Form = ({ items, setItems, haveItems, setHaveItems }) => {
         }
     }
 
+    const [selectedOptions, setSelectedOptions] = useState([]);
+
     const handleGenerateResponse = () =>//get recipe button
     {
         const form = new FormData(document.forms['ingredients']);
-        const data = Object.fromEntries(form.entries());
+        // const data = Object.fromEntries(form.entries());
 
-        const selectedOptions = [];
+        const options = [];
         if (form.get("stove")) selectedOptions.push("stove");
         if (form.get("boil")) selectedOptions.push("boil");
         if (form.get("microwave")) selectedOptions.push("microwave");
         if (form.get("diet")) {
-            selectedOptions.push("diet");
-            selectedOptions.push(`dietText: ${form.get("dietText")}`);
+            options.push("diet");
+            options.push(`dietText: ${form.get("dietText")}`);
         }
+        setSelectedOptions(options);
+
         console.log('ingrideints :', items);
         console.log("selected options :", selectedOptions);
         //console.log(data); // You can send this to an API later
@@ -67,7 +71,12 @@ const Form = ({ items, setItems, haveItems, setHaveItems }) => {
                         ) : null}
                 </div>
 
-                <Response showResponse={showResponse} />
+                <Response 
+                showResponse={showResponse} 
+                items={items}
+                selectedOptions={selectedOptions}
+
+                />
             </form>
         </div>
     )
