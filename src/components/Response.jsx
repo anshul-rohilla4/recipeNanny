@@ -1,6 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
-const SYSTEM_PROMPT = "You are a helpful chef. Give a clear and concise recipe based on available ingredients and cooking tools.";
+const SYSTEM_PROMPT = `You are a helpful chef. Give a clear, concise recipe based on available ingredients and cooking tools.
+Format the answer in clean Markdown for a recipe app:
+- Start with a short recipe title.
+- Use sections: Ingredients, Why this works, Steps, Tips.
+- Do not use Markdown tables.
+- Keep ingredients as bullet points.
+- Keep steps as a numbered list.
+- Avoid long paragraphs.`;
+
+const markdownComponents = {
+    h1: ({ children }) => <h1 className="mb-3 text-3xl font-semibold text-gray-950">{children}</h1>,
+    h2: ({ children }) => <h2 className="mt-6 mb-2 text-2xl font-semibold text-gray-900">{children}</h2>,
+    h3: ({ children }) => <h3 className="mt-5 mb-2 text-xl font-semibold text-gray-900">{children}</h3>,
+    p: ({ children }) => <p className="mb-4 leading-8 text-gray-700">{children}</p>,
+    ul: ({ children }) => <ul className="mb-5 list-disc space-y-2 pl-6 marker:text-orange-500">{children}</ul>,
+    ol: ({ children }) => <ol className="mb-5 list-decimal space-y-3 pl-6 marker:font-semibold marker:text-orange-500">{children}</ol>,
+    li: ({ children }) => <li className="leading-7 text-gray-700">{children}</li>,
+    strong: ({ children }) => <strong className="font-semibold text-gray-950">{children}</strong>,
+};
 
 const Response = ({ showResponse, items, selectedOptions }) => {
     const [recipe, setRecipe] = useState("");
@@ -83,9 +101,9 @@ const Response = ({ showResponse, items, selectedOptions }) => {
 
     return (
         <section className="mt-5 m-3 text-lg text-gray-800 transition-opacity duration-500 ease-in-out animate-fadeIn">
-            <h2 className='text-2xl'>Chef Recommends:</h2>
-            <article className="suggested-recipe-container text-justify pt-3" aria-live="polite">
-                {recipe ? <ReactMarkdown>{recipe}</ReactMarkdown> : <p>Generating recipe...</p>}
+            <h2 className='text-2xl font-semibold text-orange-600'>Chef Recommends:</h2>
+            <article className="suggested-recipe-container mt-4 rounded-xl border border-orange-100 bg-white p-5 text-left shadow-sm" aria-live="polite">
+                {recipe ? <ReactMarkdown components={markdownComponents}>{recipe}</ReactMarkdown> : <p className="text-gray-600">Generating recipe...</p>}
             </article>
         </section>
     );
