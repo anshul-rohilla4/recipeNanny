@@ -30,9 +30,9 @@ const Form = ({ items, setItems, haveItems, setHaveItems }) => {
         // const data = Object.fromEntries(form.entries());
 
         const options = [];
-        if (form.get("stove")) selectedOptions.push("stove");
-        if (form.get("boil")) selectedOptions.push("boil");
-        if (form.get("microwave")) selectedOptions.push("microwave");
+        if (form.get("stove")) options.push("stove");
+        if (form.get("boil")) options.push("boil");
+        if (form.get("microwave")) options.push("microwave");
         if (form.get("diet")) {
             options.push("diet");
             options.push(`dietText: ${form.get("dietText")}`);
@@ -40,7 +40,7 @@ const Form = ({ items, setItems, haveItems, setHaveItems }) => {
         setSelectedOptions(options);
 
         console.log('ingrideints :', items);
-        console.log("selected options :", selectedOptions);
+        console.log("selected options :", options);
         //console.log(data); // You can send this to an API later
 
     }

@@ -7,12 +7,19 @@ const Response = ({ showResponse, items, selectedOptions }) => {
 
     useEffect(() => {
         if (!showResponse) return;
+        setRecipe("");
 
         // const hf = new HfInference(import.meta.env.VITE_HF_ACCESS_TOKEN); //hugging face
 
-        async function getRecipeFromMistral() {
+        async function getRecipeFromOpenRouter() {
+            const apiKey = import.meta.env.VITE_OPENROUTER_API_KEY;
             const ingredientsString = items.join(", ");
             const optionsString = selectedOptions.join(", ");
+
+            if (!apiKey) {
+                setRecipe("Missing OpenRouter API key. Add VITE_OPENROUTER_API_KEY to your .env file.");
+                return;
+            }
 
             // console.log("API Key being used:", import.meta.env.VITE_OPENROUTER_API_KEY);
 
@@ -36,8 +43,8 @@ const Response = ({ showResponse, items, selectedOptions }) => {
                 const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
                     method: "POST",
                     headers: {
-                        "Authorization": `Bearer ${import.meta.env.VITE_OPENROUTER_API_KEY}`,
-                        "HTTP-Referer": `${window.location.host}`, // Optional. Site URL for rankings on openrouter.ai.
+                        "Authorization": `Bearer ${apiKey}`,
+                        "HTTP-Referer": window.location.origin, // Optional. Site URL for rankings on openrouter.ai.
                         "X-Title": "Chef Nan", // Optional. Site title for rankings on openrouter.ai.
                         "Content-Type": "application/json"
                     },
@@ -59,16 +66,17 @@ const Response = ({ showResponse, items, selectedOptions }) => {
                     throw new Error(`OpenRouter API error :${response.statusText}`);
                 }
                 const data = await response.json();
-                setRecipe(data.choices[0].message.content);
+                const content = data?.choices?.[0]?.message?.content;
+                setRecipe(content || "Sorry, I could not generate a recipe from that response.");
             }
             catch(err){
                 console.error("OpenRouter error: ",err.message);
-                setRecipe("Sorry something went wrong whiile generating the recipe.")
+                setRecipe("Sorry, something went wrong while generating the recipe.")
             }
         }
     
 
-        getRecipeFromMistral();
+        getRecipeFromOpenRouter();
     }, [showResponse, items, selectedOptions]);
 
     if (!showResponse) return null;
