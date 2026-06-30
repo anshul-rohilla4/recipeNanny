@@ -1,4 +1,4 @@
-# RecipeNan
+# RecipeNan @ https://genie-rasoi.netlify.app/
 
 A modern recipe recommendation application powered by AI. Input your available ingredients and get personalized recipe suggestions using Hugging Face's inference API.
 
